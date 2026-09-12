@@ -1,5 +1,7 @@
 # AI Agent 记忆/技能插件评分基准与 GitHub 同类项目对照
 
+![评分总表](assets/scores-overview.png)
+
 产出日期：2026-09-12。本仓库是对 AI agent 的"记忆 / 技能"类插件的一套**10 维度 × 100 分（总分 1000）评分基准**，以及用它对 GitHub 上同类项目的横向对照。研究对象起点是 [gulagala001/trisoul_x](https://github.com/gulagala001/trisoul_x)（现重定向至 oh-my-dsh）。
 
 > ⚠️ **引用前必读 [DISCLAIMER.md](DISCLAIMER.md)**：本仓库是公开信息整理与自建基准，非实测评测；总分不可单独引用。

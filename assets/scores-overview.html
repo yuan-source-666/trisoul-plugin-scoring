@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+    background: #fafaf7;
+    color: #191919;
+    padding: 36px 40px;
+  }
+  h1 { font-family: Georgia, "Noto Serif SC", serif; font-size: 26px; margin-bottom: 4px; }
+  .sub { color: #75756e; font-size: 13px; margin-bottom: 22px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { border-bottom: 1px solid #dededa; padding: 8px 9px; text-align: left; white-space: nowrap; }
+  thead th {
+    border-bottom: 2px solid #191919;
+    font-weight: 700; font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+  th.num, td.num { text-align: right; font-family: Consolas, Menlo, monospace; }
+  td.name b { font-size: 13.5px; }
+  td.name .d { color: #75756e; font-size: 11px; margin-left: 6px; }
+  tr.me td { background: #efefe8; font-weight: 600; }
+  tr.total-row td {
+    border-top: 2px solid #191919; border-bottom: 0;
+    font-weight: 700; padding-top: 10px;
+  }
+  td.total { font-weight: 700; font-size: 14px; }
+  .warn { color: #75756e; }
+  .footnote { margin-top: 16px; font-size: 11.5px; color: #75756e; line-height: 1.7; }
+</style>
+</head>
+<body>
+  <h1>AI 记忆 / 技能插件 · 10 维评分总表</h1>
+  <div class="sub">评分基准：10 维度 × 100 分（总分 1000）· 数据截至 2026-09-12 · 证据与评述见 scores.md</div>
+  <table>
+    <thead>
+      <tr>
+        <th>项目</th>
+        <th class="num">D1 写入提取</th>
+        <th class="num">D2 检索</th>
+        <th class="num">D3 作用域</th>
+        <th class="num">D4 持久化</th>
+        <th class="num">D5 技能协议</th>
+        <th class="num">D6 宿主兼容</th>
+        <th class="num">D7 可观测</th>
+        <th class="num">D8 安全隐私</th>
+        <th class="num">D9 性能规模</th>
+        <th class="num">D10 生态</th>
+        <th class="num">总分 /1000</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <div class="footnote">
+    无标记 = 有直接证据的给分 · <span class="warn">⚠0 = 信息不足记 0 分（非能力否定）</span> · N/A = 无此能力形态，按 50 分中性折算 ·
+    D2 / D9 的分数多为架构定性判断与项目自报数据，需实测复核 · trisoul_x 即研究对象 oh-my-dsh（DeepSeek Harness 插件）
+  </div>
+  <script>
+    const D = [
+      ["mem0ai/mem0","记忆层",[85,90,85,90,"N/A",95,85,70,85,95],830],
+      ["letta-ai/letta","有状态 agent 平台",[90,65,85,85,90,80,90,65,60,90],800],
+      ["getzep/graphiti","时序知识图谱",[90,95,75,90,"N/A",80,60,70,70,90],770],
+      ["ComposioHQ/composio","工具/技能层",["N/A","N/A",70,75,95,90,75,75,55,85],720],
+      ["basicmachines-co/basic-memory","本地 markdown 记忆",[65,75,65,80,80,70,60,90,["⚠",45],75],705],
+      ["langchain-ai/langmem","LangChain 记忆 SDK",[85,75,80,75,"N/A",65,80,70,["⚠",40],75],695],
+      ["supermemoryai/supermemory","记忆与上下文引擎",[85,70,55,75,75,85,50,65,["⚠",45],80],685],
+      ["MemTensor/MemOS","记忆操作系统",[85,85,65,75,"N/A",70,50,55,75,75],680],
+      ["topoteretes/cognee","知识图谱记忆",[85,75,55,85,"N/A",70,50,70,["⚠",40],85],665],
+      ["langgenius/dify-plugins","插件市场生态",["N/A","N/A",55,75,90,70,60,70,65,75],660],
+      ["doobidoo/mcp-memory-service","MCP 记忆服务",[75,65,55,75,80,75,60,75,["⚠",40],["⚠",55]],655],
+      ["obra/superpowers","技能方法论库",["N/A","N/A",40,65,90,85,40,65,"N/A",90],625],
+      ["rohitg00/agentmemory","编码 agent 记忆",[70,["⚠",50],70,65,75,85,50,55,["⚠",40],60],620],
+      ["anthropics/skills","Agent Skills 官方仓库",["N/A","N/A",40,55,95,90,35,45,60,80],600],
+      ["memodb-io/memobase","用户画像记忆",[75,60,65,60,"N/A",70,45,60,["⚠",40],70],595],
+      ["modelcontextprotocol/servers","MCP 参考实现",[45,45,30,55,95,85,30,80,40,80],585],
+      ["trisoul_x (oh-my-dsh)","本仓库研究对象",[70,60,75,75,45,50,60,80,35,25],575],
+    ];
+    const fmt = (v) => Array.isArray(v)
+      ? `<span class="warn">${v[0]}0 ${v[1]}</span>`
+      : (v === "N/A" ? `<span class="warn">N/A 50</span>` : v);
+    document.getElementById("rows").innerHTML =
+      D.map(([name, desc, dims, total]) =>
+        `<tr class="${name.startsWith("trisoul") ? "me" : ""}">
+          <td class="name"><b>${name}</b><span class="d">${desc}</span></td>
+          ${dims.map((v) => `<td class="num">${fmt(v)}</td>`).join("")}
+          <td class="num total">${total}</td>
+        </tr>`).join("");
+  </script>
+</body>
+</html>
